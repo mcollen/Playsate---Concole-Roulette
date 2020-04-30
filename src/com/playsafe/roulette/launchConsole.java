@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Scanner;
 
 public class launchConsole implements Runnable{
 	
@@ -30,8 +32,7 @@ public class launchConsole implements Runnable{
 		try {
 			
 	        BufferedReader reader=new BufferedReader(new FileReader("playerList.txt"));
-	        String line;
-	        
+	       	        
 	        // load all players
 	        loadPlayers(reader);
 	        
@@ -39,12 +40,22 @@ public class launchConsole implements Runnable{
 	        readConsoleInput();
 	        
 	        //generate rondom number
-	        int play = Integer.parseInt(String.valueOf(Math.random()));
-	        System.out.println("Winning Number is:    "+play);
+	        Random random = new Random();
+	        int range = 36;
+	        int randomNumber =  random.nextInt(range) + 1;
+	        System.out.println("Winning Number is:    "+randomNumber);
+	        
+	        //check winners
+	        checkWinners(randomNumber);
+	        
 		} catch (FileNotFoundException ex) {
 			System.out.println("Please add Players List file(payerList.txt) to :"+System.getProperty("user.dir"));
 		}
 		return true;       
+	}
+
+	private void checkWinners(int randomNumber) {
+				
 	}
 
 	private void loadPlayers(BufferedReader reader) throws IOException {
@@ -57,10 +68,11 @@ public class launchConsole implements Runnable{
 	}
 	
 	private void readConsoleInput() throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		String line = reader.readLine();
-		String[] bet = line.split(" ");
-		while (bet != null && !bet[0].equals("end")) {
+		Scanner reader = new Scanner(System.in);
+		String line = reader.next();
+		String[] bet;
+		while (line != null && !line.contentEquals("end")) {
+			bet = line.split(" ");
 			record = new ArrayList<String>();
 			if (bet.length > 1) {
 				record.add(bet[1]); //store bet number
@@ -69,6 +81,8 @@ public class launchConsole implements Runnable{
 			} else {
 				System.out.println("Please Enter correct input \n <Player name> [bet] [amount] ... or 'end' to end list");
 			}
+			reader = new Scanner(System.in);
+			line = reader.next();
 		}
 	}
 	
