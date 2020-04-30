@@ -1,6 +1,7 @@
 package com.playsafe.roulette;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,20 +26,24 @@ public class launchConsole implements Runnable{
 		}
 	}
 	
-	private boolean startGame() throws IOException {		    
-        BufferedReader reader=new BufferedReader(new FileReader("payerList.txt"));
-        String line;
-        
-        // load all players
-        loadPlayers(reader);
-        
-        //Read console input
-        readConsoleInput();
-        
-        //generate rondom number
-        int play = Integer.parseInt(String.valueOf(Math.random()));
-        System.out.println("Winning Number is:    "+play);
-        
+	private boolean startGame() throws IOException {
+		try {
+			
+	        BufferedReader reader=new BufferedReader(new FileReader("playerList.txt"));
+	        String line;
+	        
+	        // load all players
+	        loadPlayers(reader);
+	        
+	        //Read console input
+	        readConsoleInput();
+	        
+	        //generate rondom number
+	        int play = Integer.parseInt(String.valueOf(Math.random()));
+	        System.out.println("Winning Number is:    "+play);
+		} catch (FileNotFoundException ex) {
+			System.out.println("Please add Players List file(payerList.txt) to :"+System.getProperty("user.dir"));
+		}
 		return true;       
 	}
 
@@ -48,7 +53,7 @@ public class launchConsole implements Runnable{
         	record = new ArrayList<String>();
         	lists.put(line, record);
         }
-		
+		System.out.println("Player name list Loaded Successful");
 	}
 	
 	private void readConsoleInput() throws IOException {
